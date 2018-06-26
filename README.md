@@ -1,15 +1,11 @@
 # stock-quoter
 
-outputs latest stock quotes for stock symbols provided
+outputs latest stock quotes for stock symbols provided. Also reference main_stock_quote_tracker.py comments at top of file.
 
 Stock Quoter was developed and tested on Windows 8.1 and not tested on other Windows, Linux, etc. OS.
 
 Stock Quote Tracker will get latest trading price for stock symbols provided in the 
 symbol_list1 and symbols_list2 lists.
-
-1. If the current day is a weekend or holdiay, the previous trading day data will be collected and displayed.
-2. The latest data will be compared to previous latest data for each stock symbol and the percent change + or - 
-   wil be calculated and dispayed
 
 Again, this was developed and tested on Windows 8.1 and not tested on other Windows, Linux, etc. OS.
 
@@ -18,7 +14,6 @@ The following packages need a pip install. Please visit url for any special inst
  - holidays - https://pypi.org/project/holidays/
 
 Real time stock quotes are obtained (get requests) from the Alpha Vantage api.
-
 
 Alpha Vantage
 
