@@ -19,8 +19,8 @@ The following packages need a pip install. Please visit url for any special inst
 
 Real time stock quotes are obtained (get requests) from the Alpha Vantage api.
 
+
 Alpha Vantage
-#############
 
 An Alpha Vantage api_key is mandatory to run this script. You can obtain an api_key for free from
 https://www.alphavantage.co/
