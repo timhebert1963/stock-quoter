@@ -30,7 +30,7 @@ Cut and paste the 3 lines below and replace <your api_key number> with the api_k
 Vantage. If you use the 3 lines below it will just work.
 
    3 lines of your .txt file are as follows
-   ----------------------------------------
+   
    Alpha Vantage is a realtime Stock quote
    Alpha Vantage apikey = <your api_key number>
    <your api_key number>
