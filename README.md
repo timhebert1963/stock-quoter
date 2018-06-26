@@ -32,8 +32,8 @@ Vantage. If you use the 3 lines below it will just work.
 3 lines of your .txt file are as follows
    
 Alpha Vantage is a realtime Stock quote
-Alpha Vantage apikey
-<your api_key number>
+Alpha Vantage 
+<your_api_key_number>
 
 
 Next: you will need to provide the path to the alpha_vantage_api_key.txt.
