@@ -66,11 +66,12 @@ def run_stock_quotes(av_url, av_function, av_api_key, symbol_list):
     est_date = get_est_date()
     est_time = get_est_time()  # get_est_time will return tuple (hour, time)
     est_day  = get_est_day()
+
     holiday_result = is_US_holiday(est_date)
 
     # preserve est_date.
-    # orig_est_date = est_date -> orig_est_date will be used in display_stock_quotes
-    #                 if original est_date changes because of holidays, or weekend days
+    # orig_est_date = est_date -> orig_est_date will be used in display_stock_quotes if
+    #                 - original est_date changes because of holidays, or weekend days
     orig_est_date = est_date
 
     ################################################################################
@@ -83,7 +84,7 @@ def run_stock_quotes(av_url, av_function, av_api_key, symbol_list):
     #              market is not open
     #         - will return a message with a string or a message with no string
     ################################################################################
-    display_message = get_display_message(est_time, est_day, holiday_result)
+    display_message = get_display_message(orig_est_date, est_time, est_day, holiday_result)
 
     ################################################################################
     #
@@ -213,7 +214,7 @@ def run_stock_quotes(av_url, av_function, av_api_key, symbol_list):
     #
     ################################################################################
     clear_screen()
-    stock_quotes_available_banner(display_message)
+    stock_quotes_available_banner(display_message, est_time)
     display_stock_quotes(est_date, orig_est_date, symbol_list, quote)
 
     return continue_tracking
