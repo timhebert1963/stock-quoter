@@ -93,19 +93,23 @@ def welcome_to_stock_quotes_banner():
 # **** End of welcome_to_stock_quotes_banner() **** #
 
 
-def stock_quotes_available_banner(second_string):
+def stock_quotes_available_banner(second_string, est_time):
 
     line_len = 118
 
+    time = what_is_string_time(est_time)
+
     # assign string to display in display_banner()
     first_string  = "Stock Quoter Results Available"
+    third_string  = "Current time: {} EST".format(time)
 
     first_string   = pad_banner_string(first_string, line_len)
     second_string  = pad_banner_string(second_string, line_len)
+    third_string   = pad_banner_string(third_string, line_len)
 
     print(first_string)
-    print('\n')
     print(second_string)
+    print(third_string)
     print('\n')
 
 # **** End of stock_quotes_available_banner() **** #
@@ -308,9 +312,54 @@ def is_US_holiday(est_date):
 # **** End of is_US_holiday() **** #
 
 
-def get_display_message(est_time, est_day, holiday_result):
+def get_display_message(est_date, est_time, est_day, holiday_result):
 
-    message = "US Stock Markets are Open"
+    def when_is_black_friday(year):
+        # Black Friday is the day after Thanksgiving and the US Stock Markets close
+        # at 1pm EST the day after Thanksgiving to oberserve Thanksgiving.
+        #
+        # The same day is also known as Black Friday in US Retail.
+        # return the date of black_friday in the format '2018-11-23'
+        us_holidays = holidays.UnitedStates()
+
+        str_year = str(year)
+
+        for i in range(13, 31):
+            str_i = str(i)
+            date = str_year + '-' + '11' + '-' + str_i
+
+            is_thanksgiving = us_holidays.get(date)
+
+            if is_thanksgiving ==  None:
+                pass
+            else:
+                # increment the 'day' of the date + 1 and this is black_friday
+                black_friday = str_year + '-' + '11' + '-' + str(i+1)
+
+                return black_friday
+
+    # **** End of function when_is_black_friday() **** #
+
+    # split the est_date passed in as argument
+    # convert the indexes of split_date to int
+    #
+    # year will be used to determine what date of that year is 'Black Friday' which is day 
+    # after Thanksgiving
+    #
+    # month and day will be used to determine if the date is July 3rd or Dec 24
+    #
+    # US Stock Markets close at 1pm EST on July 3rd, Black Friday (day after Thanksgiving)
+    # and Dec 24th of every year
+    split_date = est_date.split('-')
+    year  = int(split_date[0])
+    month = int(split_date[1])
+    day   = int(split_date[2])
+
+    black_friday = when_is_black_friday(year)
+
+    current_est_time = what_is_string_time(est_time)
+
+    message        = "US Stock Markets are Open"
     closed_message = "US Stock Markets are Closed"
 
     # US Stock Markets are closed on Saturday and Sunday
@@ -323,25 +372,64 @@ def get_display_message(est_time, est_day, holiday_result):
         holiday_message = " on '{}'".format(holiday_result[1])
         message = "{}{}".format(closed_message, holiday_message)
 
-    # US stock markets (NYSE and NASDAQ) trading hours are from 9:30 EST to 16:00 EST
-    elif est_time[0] < 9 or est_time[0] > 16 or est_time[0] == 9 and est_time[1] < 30:
+    ##########################################################################################
+    # US Stock Markets close at 1pm EST on July 3rd, Day after Thanksgiving and Christmas Eve
+    ##########################################################################################
 
-        hour, minute  = str(est_time[0]), str(est_time[1])
+    # July 3rd case - day before Independance Day
+    #
+    # US Stock Markets close at 1pm EST
+    # (FYI) US Stock Markets close at 4pm EST if not a observed holiday
+    elif (month == 7 and day == 3) and (est_time[0] >= 13 and est_time[0] < 16):
+        at_1pm_message = " at 13:00 EST to observe 'Independence Day'"
+        message = "{}{}".format(closed_message, at_1pm_message)
 
-        if len(hour) == 1:
-            hour = '0' + hour
-        if len(minute) == 1:
-            minute = '0' + minute
+    # Dec 24th case - Christmas Eve
+    #
+    # US Stock Markets close at 1pm EST
+    # (FYI) US Stock Markets close at 4pm EST if not a observed holiday
+    elif (month == 12 and day == 24) and (est_time[0] >= 13 and est_time[0] < 16):
+        at_1pm_message = " at 13:00 EST for 'Chistmas Eve'"
+        message = "{}{}".format(closed_message, at_1pm_message)
 
-        time = hour + ':' + minute
+    # Day after Thanksgiving case - aka Black Friday
+    # call when_is_black_friday(year) and a date will be returned - example: '2018-11-23'
+    #
+    # US Stock Markets close at 1pm EST
+    # (FYI) US Stock Markets close at 4pm EST if not a observed holiday
+    elif est_date == black_friday and (est_time[0] >= 13 and est_time[0] < 16):
+        at_1pm_message = " at 13:00 EST to observe 'Thanksgiving Day'"
+        message = "{}{}".format(closed_message, at_1pm_message)
 
-        time_message = (" at '{}' EST".format(time))
-        message = "{}{}".format(closed_message, time_message)
+
+    # US stock markets (NYSE and NASDAQ) trading hours are from 9:30 EST to 16:00 EST (4pm EST)
+    elif (est_time[0] < 9 or est_time[0] >= 16) or (est_time[0] == 9 and est_time[1] < 30):
+        message = "{}".format(closed_message)
         
     return message
 
 # **** End of get_display_message() **** #
 
+
+def what_is_string_time(time):
+    # convert int time to string time
+    # int time = (12, 0) where 12 is hour and 0 is minute
+    # string hour and string minute need to represent a 2 digit number
+    if time[0] <= 9:
+        hour = '0' + str(time[0])
+    else:
+        hour = str(time[0])
+
+    if time[1] <= 9:
+        minute = '0' + str(time[1])
+    else:
+        minute = str(time[1])
+
+    str_time = hour + ':' + minute
+
+    return str_time
+
+# **** End of function what_is_string_time() **** #
 
 def is_US_stock_exchange_open(est_date, est_time, est_day, holiday_result):
 
