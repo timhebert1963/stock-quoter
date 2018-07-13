@@ -121,17 +121,23 @@ def thank_you_stock_quoter_banner():
 
     # assign string to display in display_banner()
     first_string  = "########################################"
-    second_string = "#   Thank You for using Stock Quoter   #"
-    third_string  = "########################################"
+    second_string = "#                                      #"
+    third_string  = "#   Thank You for using Stock Quoter   #"
+    fourth_string = "#                                      #"
+    fifth_string  = "########################################"
 
     first_string   = pad_banner_string(first_string, line_len)
     second_string  = pad_banner_string(second_string, line_len)
     third_string   = pad_banner_string(third_string, line_len)
+    fourth_string  = pad_banner_string(fourth_string, line_len)
+    fifth_string   = pad_banner_string(fifth_string, line_len)
 
     print('\n')
     print(first_string)
     print(second_string)
     print(third_string)
+    print(fourth_string)
+    print(fifth_string)
     print('\n')
     print('\n')
 
@@ -600,13 +606,13 @@ def get_stock_quotes(url, function, api_key, current_date, symbol_list, pb):
                 # the while loop and try: except: creates a re-try mechanism
 
                 ######################################################################################################
-                # sleep for 1 second. This is done to slow down the number of get requests to Alpha Vantage site
+                # sleep for .5 second. This is done to slow down the number of get requests to Alpha Vantage site
                 # to get the real-time stock quotes. The site recommends <= 200 requests per minute
                 #
                 # at times the queries will result in a key error and the theory is this is due to the rate of get
                 # request. I have a question out to the Alpha Vantage site admins to see if the theory is correct.
                 ######################################################################################################
-                time.sleep(1)
+                time.sleep(.5)
 
                 # if try_count == 2 then first attempt to get the data for current symbol did not receive a valid response
                 # from Alpha Vantage. Typically a key error for 'Time Series (Daily)' key
@@ -1224,6 +1230,72 @@ def spinning_wheel():
     sys.stdout.write(' ')
     sys.stdout.flush()
 
+    try:
+        count = 1
+        while count != 241:
+
+            ############################################################################################
+            #
+            # each color will cycle through the spinning wheel 10 times before switching to next color
+            #
+            ############################################################################################
+            if spinner_count == 1:
+                spinner = spinner1
+            elif spinner_count == 11:
+                spinner = spinner2
+            elif spinner_count == 21:
+                spinner = spinner3
+            elif spinner_count == 31:
+                spinner = spinner4
+            elif spinner_count == 41:
+                spinner_count = 1
+
+            spinner_count += 1
+
+            for i in range(len(spinner)):
+
+                ############################################################################################
+                # display each char on the spinner list
+                ############################################################################################
+                sys.stdout.write(spinner[i])   # write the next character
+                sys.stdout.flush()             # flush stdout buffer (actual character display)
+                time.sleep(0.001)              # sleep n seconds 1.0 = seconds, 0.1 milliseconds, 0.01 micro
+
+                for i in range(117):
+                    sys.stdout.write('\b')     # erase the last written char
+
+            count += 1
+
+        # spinning wheel is done. need to enter one last back space to bring cursur to far left.
+        sys.stdout.write('\b')
+
+    except KeyboardInterrupt:
+        clear_screen()
+        time.sleep(.5)
+        print('\n')
+        thank_you_stock_quoter_banner()
+        print('\n')
+        sys.exit(0) # exit
+
+# **** End of function spinning_wheel() **** #
+
+
+def original_spinning_wheel():
+
+    ############################################################################################
+    # spinning wheel to show activity instead of using time.sleep()
+    #
+    # spin_colors() will return lists and each list has spin wheel chars set to differnt color
+    #
+    ############################################################################################
+    spinner1, spinner2, spinner3, spinner4 = spin_colors()
+
+    spinner_count = 1
+
+    # indent cursor 1 space
+    sys.stdout.write(' ')
+    sys.stdout.flush()
+
     count = 1
     while count != 241:
 
@@ -1262,4 +1334,4 @@ def spinning_wheel():
     # spinning wheel is done. need to enter one last back space to bring cursur to far left.
     sys.stdout.write('\b')
 
-# **** End of function spinning_wheel() **** #
+# **** End of function original_spinning_wheel() **** #
