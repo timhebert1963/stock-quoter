@@ -216,8 +216,14 @@ def run_stock_quotes(av_url, av_function, av_api_key, symbol_list):
     clear_screen()
     stock_quotes_available_banner(display_message, est_time)
     display_stock_quotes(est_date, orig_est_date, symbol_list, quote)
+    continue_tracking = ctrl_c_to_quit(loop_range=7)
 
-    return continue_tracking
+    if continue_tracking == False:
+        display_stock_quotes(est_date, orig_est_date, symbol_list, quote)
+        sys.exit(0) # exit
+
+    else:
+        pass
 
 # **** End of run_stock_quotes() **** #
 

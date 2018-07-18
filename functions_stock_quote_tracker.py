@@ -1148,190 +1148,34 @@ def pad_with_spaces_dots(var, length, space_or_dot):
 # **** End of pad_with_spaces_dots() **** #
 
 
-def spin_colors():
+def ctrl_c_to_quit(loop_range):
 
-    ############################################################################################
-    # assign chars of the spin wheel
-    ############################################################################################
-    a = '-'
-    b = '\\'
-    c = '|'
-    d = '/'
-
-    dot1 = ''
-    dot2 = ''
-    dot3 = ''
-    dot4 = ''
-
-    for i in range(27):
-        dot1 = dot1 + '.'
-    for i in range(29):
-        dot2 = dot2 + '.'
-    for i in range(28):
-        dot3 = dot3 + '.'
-        dot4 = dot4 + '.'
-
-    spin_a = "{}{}{}{}{}{}{}{}{}".format(a,dot1,a,dot2,a,dot3,a,dot4,a)
-    spin_b = "{}{}{}{}{}{}{}{}{}".format(b,dot1,b,dot2,b,dot3,b,dot4,b)
-    spin_c = "{}{}{}{}{}{}{}{}{}".format(c,dot1,c,dot2,c,dot3,c,dot4,c)
-    spin_d = "{}{}{}{}{}{}{}{}{}".format(d,dot1,d,dot2,d,dot3,d,dot4,d)
-
-    ############################################################################################
-    # The spinning wheel will rotate/loop through 4 different colors
-    # - CYAN, RED, GREEN, YELLOW
-    # - Colorama will set the colors
-    ############################################################################################
-    color_count = 1
-    while color_count != 5:
-
-        if color_count == 1:
-            TEXT_COLOR = Fore.CYAN
-        elif color_count == 2:
-            TEXT_COLOR = Fore.RED
-        elif color_count == 3:
-            TEXT_COLOR = Fore.GREEN
-        elif color_count == 4:
-            TEXT_COLOR = Fore.YELLOW
-
-        spin1 = (TEXT_COLOR + Style.BRIGHT + spin_a + Style.RESET_ALL)
-        spin2 = (TEXT_COLOR + Style.BRIGHT + spin_b + Style.RESET_ALL)
-        spin3 = (TEXT_COLOR + Style.BRIGHT + spin_c + Style.RESET_ALL)
-        spin4 = (TEXT_COLOR + Style.BRIGHT + spin_d + Style.RESET_ALL)
-
-        if color_count == 1:
-            spinner1 = [spin1, spin2, spin3, spin4]
-        elif color_count == 2:
-            spinner2 = [spin1, spin2, spin3, spin4]
-        elif color_count == 3:
-            spinner3 = [spin1, spin2, spin3, spin4]
-        elif color_count == 4:
-            spinner4 = [spin1, spin2, spin3, spin4]
-
-        color_count += 1       
-
-    return spinner1, spinner2, spinner3, spinner4
-
-# **** End of function spin_colors() **** #
-
-
-def spinning_wheel():
-
-    ############################################################################################
-    # spinning wheel to show activity instead of using time.sleep()
+    # Press Ctrl-C to quit will flash on the screen and remain in the same position on the display
+    # output.
     #
-    # spin_colors() will return lists and each list has spin wheel chars set to differnt color
-    #
-    ############################################################################################
-    spinner1, spinner2, spinner3, spinner4 = spin_colors()
+    # if Ctrl-C is detected sys.exit(0) will execute -> exit the program and return to the OS prompt.
 
-    spinner_count = 1
+    continue_tracking = True
 
-    # indent cursor 1 space
-    sys.stdout.write(' ')
-    sys.stdout.flush()
+    for i in range(loop_range):
+        try:
+            print("\r Press Ctrl-C to exit Stock Quoter!", end='', flush=True),
+            time.sleep(1)
+            print("\r                                   ", end='', flush=True)
+            time.sleep(.5)
+            print("\r Press Ctrl-C to exit Stock Quoter!", end='', flush=True)
+            time.sleep(1)
+            print("\r                                   ", end='', flush=True)
+            time.sleep(.5)
 
-    try:
-        count = 1
-        while count != 241:
+        except KeyboardInterrupt:
+            clear_screen()
+            time.sleep(.5)
+            print('\n')
+            thank_you_stock_quoter_banner()
+            continue_tracking = False
+            return continue_tracking
 
-            ############################################################################################
-            #
-            # each color will cycle through the spinning wheel 10 times before switching to next color
-            #
-            ############################################################################################
-            if spinner_count == 1:
-                spinner = spinner1
-            elif spinner_count == 11:
-                spinner = spinner2
-            elif spinner_count == 21:
-                spinner = spinner3
-            elif spinner_count == 31:
-                spinner = spinner4
-            elif spinner_count == 41:
-                spinner_count = 1
+    return continue_tracking
 
-            spinner_count += 1
-
-            for i in range(len(spinner)):
-
-                ############################################################################################
-                # display each char on the spinner list
-                ############################################################################################
-                sys.stdout.write(spinner[i])   # write the next character
-                sys.stdout.flush()             # flush stdout buffer (actual character display)
-                time.sleep(0.001)              # sleep n seconds 1.0 = seconds, 0.1 milliseconds, 0.01 micro
-
-                for i in range(117):
-                    sys.stdout.write('\b')     # erase the last written char
-
-            count += 1
-
-        # spinning wheel is done. need to enter one last back space to bring cursur to far left.
-        sys.stdout.write('\b')
-
-    except KeyboardInterrupt:
-        clear_screen()
-        time.sleep(.5)
-        print('\n')
-        thank_you_stock_quoter_banner()
-        print('\n')
-        sys.exit(0) # exit
-
-# **** End of function spinning_wheel() **** #
-
-
-def original_spinning_wheel():
-
-    ############################################################################################
-    # spinning wheel to show activity instead of using time.sleep()
-    #
-    # spin_colors() will return lists and each list has spin wheel chars set to differnt color
-    #
-    ############################################################################################
-    spinner1, spinner2, spinner3, spinner4 = spin_colors()
-
-    spinner_count = 1
-
-    # indent cursor 1 space
-    sys.stdout.write(' ')
-    sys.stdout.flush()
-
-    count = 1
-    while count != 241:
-
-        ############################################################################################
-        #
-        # each color will cycle through the spinning wheel 10 times before switching to next color
-        #
-        ############################################################################################
-        if spinner_count == 1:
-            spinner = spinner1
-        elif spinner_count == 11:
-            spinner = spinner2
-        elif spinner_count == 21:
-            spinner = spinner3
-        elif spinner_count == 31:
-            spinner = spinner4
-        elif spinner_count == 41:
-            spinner_count = 1
-
-        spinner_count += 1
-
-        for i in range(len(spinner)):
-
-            ############################################################################################
-            # display each char on the spinner list
-            ############################################################################################
-            sys.stdout.write(spinner[i])   # write the next character
-            sys.stdout.flush()             # flush stdout buffer (actual character display)
-            time.sleep(0.001)              # sleep n seconds 1.0 = seconds, 0.1 milliseconds, 0.01 micro
-
-            for i in range(117):
-                sys.stdout.write('\b')     # erase the last written char
-
-        count += 1
-
-    # spinning wheel is done. need to enter one last back space to bring cursur to far left.
-    sys.stdout.write('\b')
-
-# **** End of function original_spinning_wheel() **** #
+# **** End of ctrl_c_to_quit() **** #

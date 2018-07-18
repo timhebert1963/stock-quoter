@@ -52,7 +52,7 @@ import time
 ##### **** IMPORTANT READ THIS **** ###### **** IMPORTANT READ THIS **** ###### **** IMPORTANT READ THIS **** #####
 av_url = "https://www.alphavantage.co/query"
 av_function = "TIME_SERIES_DAILY"
-av_path = 'c:\\users\\aaron\\python scripts\\Alpha Vantage APIKEY\\alpha_vantage_api_key.txt'
+av_path = 'c:\\users\\aaron\\python scripts\\APIKEYS\\Alpha Vantage APIKEY\\alpha_vantage_api_key.txt'
 av_api_key = get_alpha_vantage_api_key(av_path)
 
 #################################################################################################
@@ -78,7 +78,7 @@ symbol_list2 = ['NDAQ', 'FB', 'GOOGL', 'DIS', 'FOX', 'NFLX', 'PG', 'WMT', 'WM', 
 # Begin
 loop_continue = True
 count = 1
-max_count = 1000
+max_count = 1001
 
 # this script will loop through the stock symbols provided 1000 times
 while loop_continue:
@@ -139,32 +139,18 @@ while loop_continue:
         try_symbol_list = False
 
 
-    # if continue_tracking is True, user wants to continue with Stock Quoter
-    continue_tracking = run_stock_quotes(av_url, av_function, av_api_key, symbol_list)
+    # call run_stock_quotes()
+    run_stock_quotes(av_url, av_function, av_api_key, symbol_list)
 
-    if not continue_tracking or count == max_count:
+    # check if max_count has been reached.
+    # if count == max_count then program will end
+    if count == max_count:
         loop_continue = False
-        clear_screen()
+        print('\n')
         thank_you_stock_quoter_banner()
-    else:
 
+    else:
         count += 1
 
-        ##################################################################################
-        #
-        # Press Ctrl-C to exit Stock Quoter!
-        #
-        # this is not graceful. Trying to figure out a way to implement an input timeout
-        # - if user does not provide continue 'y' or 'n' (yes or no) within a timeout 
-        #   period then Stock Quoter will continue and assume 'y' as the input
-        #
-        ##################################################################################
-        print(" Press Ctrl-C to exit Stock Quoter!")
-        print('\n')
-
-        spinning_wheel()
-
-        clear_screen()
-        time.sleep(2)
 
 
